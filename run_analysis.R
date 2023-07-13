@@ -36,19 +36,21 @@ mean.std.features= grep("mean()|std()", features$V2)
 
 ### Creating a data set containing variables which contain only mean and std values
 
-mean.std.all= all [, mean.std.features]
+mean.std.all= all [, mean.std.features] # subsetting columns
 
 ### Creating a factor and renamin the activities
 
-mean.std.all= mutate(mean.std.all, activity= factor(1*activity, labels= c("walking", "walking.up", "walking.down", "sitting", "standing", "laying")))
+mean.std.all= mutate(mean.std.all, activity= factor(1*activity, labels= c("walking", "walking.up", "walking.down", "sitting", "standing", "laying"))) # making activity as a factor and renaming it
 
 ### Variable naming
 
-var.names= grep("mean()|std()", features$V2, value=TRUE)
-colnames(mean.std.all)= c("subject", "activity", var.names)
+var.names= grep("mean()|std()", features$V2, value=TRUE) # extracting all the variables containing mean and std from the V2 in features
+colnames(mean.std.all)= c("subject", "activity", var.names) # naming the variables with the extracted variable
 
 # Creating a tidy dataset
 
-tidy= mean.std.all %>% group_by(activity, subject) %>% summarise_at(vars(1:77), mean)
+tidy= mean.std.all %>% group_by(activity, subject) %>% summarise_at(vars(1:77), mean) # grouping by activity and subject all of the variables containing mean and std
+write.table(tidy, "tidy.txt", row.names= F, quote= F) # getting a .txt file
+
 
 
